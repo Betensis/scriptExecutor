@@ -48,7 +48,7 @@ class Starter:
     def start_all(self):
         """Execute all scripts"""
         for script in self.scripts._get_all_scripts_files():
-            print(f'Try execute {script.name}')
+            print(f"Try execute {script.name}")
             self.scripts.execute(script.name)
 
 
