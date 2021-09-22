@@ -22,13 +22,13 @@ class Scripts:
     def _get_all_scripts_files(self) -> Generator[Path, None, None]:
         yield from filter(lambda x: x.is_file(), self.scripts_dir.iterdir())
 
-    def show(self) -> Generator[str, None, None]:
+    def all_scripts(self) -> Generator[str, None, None]:
         """Show all scripts"""
-        yield from [file.name for file in self._get_all_scripts_files()]
+        yield from map(lambda file: file.name, self._get_all_scripts_files())
 
     def execute(self, file: str) -> None:
         """Execute script by name"""
-        if not file in [*map(lambda x: x.name, self._get_all_scripts_files())]:
+        if not file in self.all_scripts():
             raise FireError(f"file doesn't exist")
 
         full_path = self.scripts_dir.joinpath(file)
