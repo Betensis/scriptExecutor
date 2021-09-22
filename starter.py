@@ -1,6 +1,7 @@
 from os import scandir
 from pathlib import Path
 import subprocess
+from typing import Generator
 
 import fire
 from fire.core import FireError
@@ -18,14 +19,16 @@ class Scripts:
             raise FireError(f"{scripts_dir.resolve()} must be directory not file")
         return scripts_dir
 
-    def get_all_scripts_files(self) -> list[Path]:
-        return [*filter(lambda x: x.is_file(), self.scripts_dir.iterdir())]
+    def _get_all_scripts_files(self) -> Generator[Path, None, None]:
+        yield from filter(lambda x: x.is_file(), self.scripts_dir.iterdir())
 
-    def show(self):
-        print(*[file.name for file in self.get_all_scripts_files()])
+    def show(self) -> Generator[str, None, None]:
+        """Show all scripts"""
+        yield from [file.name for file in self._get_all_scripts_files()]
 
-    def execute(self, file: str):
-        if not file in [*map(lambda x: x.name, self.get_all_scripts_files())]:
+    def execute(self, file: str) -> None:
+        """Execute script by name"""
+        if not file in [*map(lambda x: x.name, self._get_all_scripts_files())]:
             raise FireError(f"file doesn't exist")
 
         full_path = self.scripts_dir.joinpath(file)
@@ -43,7 +46,9 @@ class Starter:
         self.scripts = Scripts()
 
     def start_all(self):
-        for script in self.scripts.get_all_scripts_files():
+        """Execute all scripts"""
+        for script in self.scripts._get_all_scripts_files():
+            print(f'Try execute {script.name}')
             self.scripts.execute(script.name)
 
 
