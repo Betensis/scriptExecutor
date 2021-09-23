@@ -1,4 +1,4 @@
-from os import scandir
+import os
 from pathlib import Path
 import subprocess
 from typing import Generator
@@ -12,7 +12,7 @@ class Scripts:
 
     @property
     def scripts_dir(self):
-        scripts_dir = Path("./scripts")
+        scripts_dir = Path(os.environ.get('SCRIPT_DIR') or "./scripts")
         if not scripts_dir.exists():
             raise FireError(f"scripts directory {scripts_dir.resolve()} didn't exists")
         if scripts_dir.is_file():
