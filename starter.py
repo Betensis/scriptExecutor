@@ -8,11 +8,14 @@ from fire.core import FireError
 
 
 class Scripts:
-    executors_by_suffix = {".sh": "bash", ".py": "python3.9"}
+    executors_by_suffix = {
+        ".sh": "bash",
+        ".py": "python3",
+    }
 
     @property
     def scripts_dir(self):
-        scripts_dir = Path(os.environ.get('SCRIPT_DIR') or "./scripts")
+        scripts_dir = Path(os.environ.get("SCRIPT_DIR") or "./scripts")
         if not scripts_dir.exists():
             raise FireError(f"scripts directory {scripts_dir.resolve()} didn't exists")
         if scripts_dir.is_file():
